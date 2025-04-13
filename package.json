@@ -1,6 +1,6 @@
 {
     "name": "node-red-contrib-awtrix3",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "awtrix3 by 10der",
     "dependencies": {
         "node-fetch": "^2.6.0"
@@ -8,8 +8,7 @@
     "scripts": {
         "lint": "eslint -c .eslintrc ./"
     },
-    "repository": {
-    },
+    "repository": {},
     "author": "Oleg Denisenko <oleg.denisenko@gmail.com>",
     "keywords": [
         "node-red"
