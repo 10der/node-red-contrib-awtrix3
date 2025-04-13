@@ -1,0 +1,32 @@
+<script type="text/javascript">
+    RED.nodes.registerType('awtrix3', {
+        category: 'awtrix3',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" },
+            device: { type: "awtrix3-config", required: true },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "awtrix3.png",
+        label: function () {
+            return this.name || "awtrix3";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="awtrix3">
+    <div class="form-row">
+        <label for="node-input-device"><i class="icon-tag"></i> AWTRIX3</label>
+        <input type="text" id="node-input-device" placeholder="placeholder="http://">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="awtrix3">
+    <p>A simple node awtrix3</p>
+</script>

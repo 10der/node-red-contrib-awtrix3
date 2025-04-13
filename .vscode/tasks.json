@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "command": "npm",
+  "tasks": [
+    {
+      "group": "build",
+      "type": "shell",
+      "label": "lint",
+      "args": [
+        "run",
+        "lint",
+        "-- --fix"
+      ],
+      "problemMatcher": [
+        "$eslint-stylish"
+      ]
+    }
+  ]
+}

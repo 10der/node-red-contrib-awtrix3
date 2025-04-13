@@ -1,0 +1,89 @@
+<script type="text/javascript">
+    RED.nodes.registerType('awtrix3-config', {
+        category: 'config',
+        defaults: {
+            name: { value: "", required: true, validate: RED.validators.regex(/^[a-zA-Z0-9-_]+$/) },
+            ipaddress: { value: "", required: true },
+        },
+        credentials: {
+            login: { type: "text", required: false },
+            password: { type: "password", required: false }
+        },
+        label: function () {
+            return this.name;
+        },
+        oneditprepare: function () {
+            var node = this;
+
+            try {
+                $("#node-config-input-name").autocomplete("destroy");
+            } catch (err) { }
+
+            $("#node-lookup-name").click(function () {
+                $("#node-lookup-name-icon").removeClass('fa-search');
+                $("#node-lookup-name-icon").addClass('spinner');
+                $("#node-lookup-name").addClass('disabled');
+
+                //var endPoint = $("#node-input-server :selected").text();
+                var endPoint = `awtrix3`;
+                $.getJSON(endPoint, function (data) {
+                    var search = [];
+                    $.each(data, function (i, item) {
+                        search.push(item);
+                    });
+                    $("#node-config-input-name").autocomplete({
+                        source: search,
+                        minLength: 0,
+                        select: function (event, ui) {
+                            $(this).val(ui.item.label);
+                            $("#node-config-input-ipaddress").val(ui.item.value);
+                            return false;
+                        },
+                        change: function (event, ui) {
+                            //console.log("change");
+                        },
+                        close: function (event, ui) {
+                            $("#node-config-input-name").autocomplete("destroy");
+                        }
+                    }).autocomplete("search", $("#node-config-input-name").val());
+                })
+                    .fail(function () {
+                        console.log("error");
+                    })
+                    .always(function () {
+                        $("#node-lookup-name-icon").addClass('fa-search');
+                        $("#node-lookup-name-icon").removeClass('spinner');
+                        $("#node-lookup-name").removeClass('disabled');
+                    });
+            });
+        },
+        oneditsave: function () {
+            var node = this;
+            node.outputs = 1;
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="awtrix3-config">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="icon-bookmark"></i> Name</label>
+        <input type="text" id="node-config-input-name" style="width:60%;" placeholder="awtrix_xxxxxxx"/>
+        <a id="node-lookup-name" class="btn"><i id="node-lookup-name-icon" class="fa fa-search"></i></a> 
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-ipaddress"><i class="fa fa-globe"></i> IP Address</label>
+        <input type="text" id="node-config-input-ipaddress" placeholder="192.168.xx.xx">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-login"><i class="fa fa-user"></i> Login</label>
+        <input type="text" id="node-config-input-login">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-password"><i class="fa fa-key"></i> Password</label>
+        <input type="password" id="node-config-input-password">
+    </div>
+
+</script>
