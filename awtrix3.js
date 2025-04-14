@@ -64,53 +64,9 @@ module.exports = function (RED) {
                 function (error) {
                     node.error(error.message, { topic: "init" });
                     node.status({ fill: "red", shape: "dot", text: "not initialized" });
-
-                    // trying to re-init again
-                    setTimeout(() => {
-                        node.status({ fill: 'yellow', shape: 'ring', text: 'force re-connection' });
-                        init();
-                    }, 2000);
                 },
             );
         };
-
-        const poll = function () {
-            if (!node.initialized) {
-                return
-            }
-            // just call poll for a new events
-            callApi('stats',
-                function (data) {
-                    node.send([null, { topic: "stats", payload: data }]);
-                },
-                function (error) {
-                    node.initialized = false;
-                    node.error(error.message, { topic: "poll" });
-                    node.status({ fill: "red", shape: "dot", text: "error" });
-                    // trying to re-init again
-                    init();
-                },
-            );
-        }
-
-        const defaultPollerPeriod = 1;
-        let pollerPeriod = config.pollingInterval ? parseInt(config.pollingInterval, 1) : defaultPollerPeriod;
-        if (Number.isNaN(pollerPeriod) || pollerPeriod < 0 || pollerPeriod > 5) {
-            pollerPeriod = defaultPollerPeriod;
-        }
-
-        if (this.internalPolling) {
-            if (this.poller) { clearTimeout(this.poller); }
-            if (pollerPeriod !== 0) {
-                this.poller = setInterval(function () {
-                    poll();
-                }, pollerPeriod * 1000);
-            } else {
-                this.poller = setInterval(function () {
-                    poll(true);
-                }, 1 * 1000);
-            }
-        }
 
         // init
         node.status({ fill: 'yellow', shape: 'ring', text: 'connection...' });
@@ -119,7 +75,7 @@ module.exports = function (RED) {
         node.on('input', function (msg) {
             const state = ["stats", "settings", "effects", "transitions", "screen", "loop"];
             const topic = msg.topic.toLowerCase();
-            if (state.includes(topic)) {
+            if (!msg.payload && state.includes(topic)) {
                 callApi(topic,
                     function (data) {
                         node.send({ topic, payload: data });
