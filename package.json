@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-awtrix3",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "awtrix3 by 10der",
   "dependencies": {
     "node-fetch": "^2.6.0"
@@ -25,7 +25,7 @@
       "awtrix3-app": "awtrix3-app-node.js"
     }
   },
- "engines": {
+  "engines": {
     "node": ">=18"
   },
   "license": "MIT"
