@@ -25,5 +25,8 @@
       "awtrix3-app": "awtrix3-app-node.js"
     }
   },
+ "engines": {
+    "node": ">=18"
+  },
   "license": "MIT"
 }
