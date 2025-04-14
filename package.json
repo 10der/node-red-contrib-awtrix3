@@ -6,10 +6,14 @@
     "node-fetch": "^2.6.0"
   },
   "scripts": {},
-  "repository": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/10der/node-red-contrib-awtrix3.git"
+  },
   "author": "Oleg Denisenko <oleg.denisenko@gmail.com>",
   "keywords": [
-    "node-red"
+    "node-red",
+    "awtrix3"
   ],
   "node-red": {
     "nodes": {
