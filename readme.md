@@ -1,6 +1,7 @@
-#node-red-contrib-awtrix3
+# node-red-contrib-awtrix3
 [![npm version](https://badge.fury.io/js/node-red-contrib-awtrix3.svg)](https://badge.fury.io/js/node-red-contrib-awtrix3)
 [![Downloads](https://img.shields.io/npm/dt/node-red-contrib-awtrix3)](https://www.npmjs.com/package/node-red-contrib-awtrix3)
+
 [![Buy me a cofee](https://cdn.buymeacoffee.com/buttons/default-orange.png)](https://www.buymeacoffee.com/10der)
 
 ========================
