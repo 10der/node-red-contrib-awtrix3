@@ -1,21 +1,25 @@
 {
-    "name": "node-red-contrib-awtrix3",
-    "version": "0.0.4",
-    "description": "awtrix3 by 10der",
-    "dependencies": {
-        "node-fetch": "^2.6.0"
-    },
-    "scripts": {},
-    "repository": {},
-    "author": "Oleg Denisenko <oleg.denisenko@gmail.com>",
-    "keywords": [
-        "node-red"
-    ],
-    "node-red": {
-        "nodes": {
-            "awtrix3": "awtrix3.js",
-            "awtrix3-config": "awtrix3-config.js"
-        }
-    },
-    "license": "MIT"
+  "name": "node-red-contrib-awtrix3",
+  "version": "0.0.4",
+  "description": "awtrix3 by 10der",
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  },
+  "scripts": {},
+  "repository": {},
+  "author": "Oleg Denisenko <oleg.denisenko@gmail.com>",
+  "keywords": [
+    "node-red"
+  ],
+  "node-red": {
+    "nodes": {
+      "awtrix3": "awtrix3.js",
+      "awtrix3-status-node": "awtrix3-status-node.js",
+      "awtrix3-set-node": "awtrix3-set-node.js",
+      "awtrix3-config": "awtrix3-config.js",
+      "awtrix3-notify": "awtrix3-notify-node.js",
+      "awtrix3-app": "awtrix3-app-node.js"
+    }
+  },
+  "license": "MIT"
 }

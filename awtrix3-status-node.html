@@ -1,0 +1,39 @@
+<script type="text/javascript">
+    RED.nodes.registerType('awtrix3-status', {
+        category: 'awtrix3',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" },
+            command: { value: "" },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "awtrix3.png",
+        label: function () {
+            return (this.name || this.command) || "awtrix3-status";
+        },
+    });
+</script>
+
+<script type="text/html" data-template-name="awtrix3-status">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-command"><i class="fa fa-tag"></i> Command</label>
+        <select id="node-input-command" style="width:200px !important" required>            
+            <option value="stats">Status</option>
+            <option value="settings">Settings</option>
+            <option value="effects">Effects</option>
+            <option value="transitions">Transition</option>
+            <option value="screen">Screen</option>
+            <option value="loop">App loop</option>
+            <option value="msg.topic">From msg.topic</option>
+        </select>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="awtrix3-status">
+    <p>AWTRIX3 get object/value</p>
+</script>

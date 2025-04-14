@@ -1,0 +1,37 @@
+<script type="text/javascript">
+    RED.nodes.registerType('awtrix3-app', {
+        category: 'awtrix3',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: `awtrix3-${(Math.random() + 1).toString(36).substring(7)}` },
+            application: { value: "{}" },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "awtrix3.png",
+        label: function () {
+            return this.name || "awtrix3-app";
+        },
+        oneditprepare: function () {
+            $("#node-input-application").typedInput({
+                type: "json",
+                types: ["json"]
+            })
+        },
+    });
+</script>
+
+<script type="text/html" data-template-name="awtrix3-app">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-application"><i class="fa fa-tag"></i> Application</label>
+        <input type="text" id="node-input-application" placeholder="application">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="awtrix3-app">
+    <p>AWTRIX3 application</p>
+</script>

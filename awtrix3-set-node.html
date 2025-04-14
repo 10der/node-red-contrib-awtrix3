@@ -1,0 +1,195 @@
+<script type="text/javascript">
+
+    function updateView(task) {
+        if (task == "power") {
+            $("#node-set-power").show();
+            $("#node-set-sleep").hide();
+            $("#node-set-sound").hide();
+            $("#node-set-rtttl").hide();
+            $("#node-set-moodlight").hide();
+            $("#node-set-indicator").hide();
+            $("#node-set-settings").hide();
+        } else if (task == "sleep") {
+            $("#node-set-power").hide();
+            $("#node-set-sleep").show();
+            $("#node-set-sound").hide();
+            $("#node-set-rtttl").hide();
+            $("#node-set-moodlight").hide();
+            $("#node-set-indicator").hide();
+            $("#node-set-settings").hide();
+        } else if (task == "sound") {
+            $("#node-set-power").hide();
+            $("#node-set-sleep").hide();
+            $("#node-set-sound").show();
+            $("#node-set-rtttl").hide();
+            $("#node-set-moodlight").hide();
+            $("#node-set-indicator").hide();
+            $("#node-set-settings").hide();
+        } else if (task == "rtttl") {
+            $("#node-set-power").hide();
+            $("#node-set-sleep").hide();
+            $("#node-set-sound").hide();
+            $("#node-set-rtttl").show();
+            $("#node-set-moodlight").hide();
+            $("#node-set-indicator").hide();
+            $("#node-set-settings").hide();
+        } else if (task == "moodlight") {
+            $("#node-set-power").hide();
+            $("#node-set-sleep").hide();
+            $("#node-set-sound").hide();
+            $("#node-set-rtttl").hide();
+            $("#node-set-moodlight").show();
+            $("#node-set-indicator").hide();
+            $("#node-set-settings").hide();
+        } else if (task == "indicator") {
+            $("#node-set-power").hide();
+            $("#node-set-sleep").hide();
+            $("#node-set-sound").hide();
+            $("#node-set-rtttl").hide();
+            $("#node-set-moodlight").hide();
+            $("#node-set-indicator").show();
+            $("#node-set-settings").hide();
+        } else if (task == "settings") {
+            $("#node-set-power").hide();
+            $("#node-set-sleep").hide();
+            $("#node-set-sound").hide();
+            $("#node-set-rtttl").hide();
+            $("#node-set-moodlight").hide();
+            $("#node-set-indicator").hide();
+            $("#node-set-settings").show();
+        } else {
+            $("#node-set-power").hide();
+            $("#node-set-sleep").hide();
+            $("#node-set-sound").hide();
+            $("#node-set-rtttl").hide();
+            $("#node-set-moodlight").hide();
+            $("#node-set-indicator").hide();
+            $("#node-set-settings").hide();
+        }
+    }
+
+    RED.nodes.registerType('awtrix3-set', {
+        category: 'awtrix3',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" },
+            command: { value: "power", required: true, validate: function (v) { return ((v === undefined) || v == "power" || v == "sleep" || v == "sound" || v == "rtttl" || v == "moodlight" || v == "indicator" || v == "settings" || v == "msg.topic"); } },
+            power: { value: "true"  },
+            sleep: { value: "500", validate: function (v) { return ((v === undefined) || (/^\d+$/).test(v)); } },
+            sound: { value: "beep" },
+            rtttl: { value: "two_short:d=4,o=5,b=100:16e6,16e6" },
+            moodlight: { value: '{"brightness":170,"color":"#FF00FF"}' },
+            indicator: { value: "1", validate: function (v) { return ((v === undefined) || (/^\d+$/).test(v)); } },
+            indicator_color: { value: "#32a852", validate: function (v) { return ((v === undefined) || (/^\#([0-9a-f]{3}|[0-9a-f]{6})$/i).test(v)); } },
+            settings: { value: '{"TSPEED":500}' }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "awtrix3.png",
+        label: function () {
+            return (this.name || this.command) || "awtrix3-set";
+        },
+        oneditprepare: function () {
+
+            $("#node-input-settings").typedInput({
+                type: "json",
+                types: ["json"]
+            });
+
+            $("#node-input-moodlight").typedInput({
+                type: "json",
+                types: ["json"]
+            });
+
+            $("#node-input-command").on("change", function () {
+                updateView(this.value);
+            });
+
+            $("#node-input-power").typedInput({
+                type:'bool',
+                types:['bool']
+            })
+
+            $("#node-input-sleep").typedInput({
+                type:'num',
+                types:['num']
+            })
+
+            $("#node-input-indicator").typedInput({type:"indicator", types:[{
+                value: "indicator",
+                options: [
+                    { value: "1", label: "Upper right corner"},
+                    { value: "2", label: "Right side"},
+                    { value: "3", label: "Lower right corner"},
+                ]
+            }]})
+
+            updateView(this.command);
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="awtrix3-set">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-command"><i class="fa fa-tag"></i> Command</label>
+        <select id="node-input-command" style="width:200px !important" required>            
+            <option value="power">Power</option>
+            <option value="sleep">Sleep</option>
+            <option value="sound">Sound</option>
+            <option value="rtttl">RTTTL</option>
+            <option value="moodlight">Moodlight</option>
+            <option value="indicator">Indicator</option>
+            <option value="settings">Settings</option>
+            <option value="msg.topic">From msg.topic</option>
+        </select>
+    </div>
+
+    <div class="form-row" id="node-set-power">
+        <label>&nbsp;&nbsp;&nbsp;&nbsp;Mode</label>
+        <input type="text" id="node-input-power" placeholder="Mode">
+    </div>
+
+    <div class="form-row" id="node-set-sleep">
+        <label>&nbsp;&nbsp;&nbsp;&nbsp;Sleep</label>
+        <input type="text" id="node-input-sleep" placeholder="60">
+    </div>
+
+    <div class="form-row" id="node-set-sound">
+        <label>&nbsp;&nbsp;&nbsp;&nbsp;Sound</label>
+        <input type="text" id="node-input-sound" placeholder="">
+    </div>
+
+    <div class="form-row" id="node-set-rtttl">
+        <label>&nbsp;&nbsp;&nbsp;&nbsp;RTTTL</label>
+        <input type="text" id="node-input-rtttl" placeholder="">
+    </div>
+
+    <div class="form-row" id="node-set-moodlight">
+        <label for="node-input-moodlight"><i class="fa fa-tag"></i> Moodlight</label>
+        <input type="text" id="node-input-moodlight" placeholder="Value">
+    </div>
+
+    <div class="form-row" id="node-set-indicator">
+        <label>&nbsp;&nbsp;&nbsp;&nbsp;Indicator</label>
+        <input type="text" id="node-input-indicator" placeholder="Value">
+
+        <div class="form-row">
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;Color</label>
+            <input type="text" id="node-input-indicator_color" placeholder="Value">
+        </div>
+    </div>
+
+    <div class="form-row" id="node-set-settings">
+        <label for="node-input-settings"><i class="fa fa-tag"></i> Value</label>
+        <input type="text" id="node-input-settings" placeholder="Value">
+    </div>
+
+</script>
+
+<script type="text/html" data-help-name="awtrix3-set">
+    <p>AWTRIX3 set object value/state</p>
+</script>

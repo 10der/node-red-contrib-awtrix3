@@ -1,0 +1,48 @@
+<script type="text/javascript">
+    RED.nodes.registerType('awtrix3-notify', {
+        category: 'awtrix3',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" },
+            icon: { value: "" },
+            text: { value: "" },
+            options: { value: "{}" },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "awtrix3.png",
+        label: function () {
+            return this.name || "awtrix3-notify";
+        },
+        oneditprepare: function () {
+            $("#node-input-options").typedInput({
+                type: "json",
+                types: ["json"]
+            })
+        },
+    });
+</script>
+
+<script type="text/html" data-template-name="awtrix3-notify">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-icon"><i class="fa fa-tag"></i> Icon</label>
+        <input type="text" id="node-input-icon" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-text"><i class="fa fa-tag"></i> Text</label>
+        <input type="text" id="node-input-text" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-options"><i class="fa fa-tag"></i> Options</label>
+        <input type="text" id="node-input-options" placeholder="Options">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="awtrix3-notify">
+    <p>AWTRIX3 notification</p>
+</script>

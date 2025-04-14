@@ -78,7 +78,7 @@ module.exports = function (RED) {
             if (!msg.payload && state.includes(topic)) {
                 callApi(topic,
                     function (data) {
-                        node.send({ topic, payload: data });
+                        node.send({ topic, payload: data, request: msg.payload });
                         node.status({ fill: "green", shape: "dot", text: "connected" });
                     },
                     function (error) {
@@ -88,7 +88,7 @@ module.exports = function (RED) {
             } else {
                 callApi(topic,
                     function (data) {
-                        node.send({ topic, payload: data });
+                        node.send({ topic, payload: data, request: msg.payload });
                         node.status({ fill: "green", shape: "dot", text: "connected" });
                     },
                     function (error) {
