@@ -3,7 +3,8 @@
   "version": "0.0.8",
   "description": "awtrix3 by 10der",
   "dependencies": {
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "sharp": "^0.34.1"
   },
   "scripts": {},
   "repository": {

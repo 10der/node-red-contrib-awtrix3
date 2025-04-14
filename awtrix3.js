@@ -1,6 +1,8 @@
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 
 module.exports = function (RED) {
+    var tools = require('./tools');
+
     function Awtrix3Node(config) {
         RED.nodes.createNode(this, config);
         const node = this;
@@ -14,46 +16,8 @@ module.exports = function (RED) {
         node.initialized = false;
         node.status({});
 
-        const callApi = function (endpoint, func, err, payload) {
-            const url = `http://${configNode.ipaddress}/api/${endpoint}`;
-            const options = {
-                timeout: 6000,
-                method: payload ? 'POST' : 'GET',
-                body: payload ? JSON.stringify(payload) : null,
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            };
-            if (creds && creds.username && creds.username !== undefined) {
-                const authHeader = Buffer.from(`${creds.username}:${creds.password}`).toString('base64');
-                options.headers.Authorization = `Basic ${authHeader}`;
-            }
-            fetch(url, options)
-                .then((response) => {
-                    if (response.ok) {
-                        const contentType = response.headers.get("content-type");
-                        if (contentType && contentType.indexOf("application/json") !== -1) {
-                            return response.json();
-                        }
-                        return response.text();
-                    }
-                    throw new Error('Something went wrong');
-                })
-                .then((data) => {
-                    if (func) {
-                        func(data)
-                    }
-                })
-                .catch((error) => {
-                    if (err) {
-                        err(error);
-                    }
-                });
-        }
-
         const init = function () {
-            callApi('stats',
+            tools.callApi(configNode.ipaddress, 'stats', creds,
                 function (data) {
                     if (data) {
                         // TODO
@@ -76,7 +40,7 @@ module.exports = function (RED) {
             const state = ["stats", "settings", "effects", "transitions", "screen", "loop"];
             const topic = msg.topic.toLowerCase();
             if (!msg.payload && state.includes(topic)) {
-                callApi(topic,
+                tools.callApi(configNode.ipaddress, topic, creds,
                     function (data) {
                         node.send({ topic, payload: data, request: msg.payload });
                         node.status({ fill: "green", shape: "dot", text: "connected" });
@@ -86,7 +50,7 @@ module.exports = function (RED) {
                         node.status({ fill: "red", shape: "dot", text: "error" });
                     });
             } else {
-                callApi(topic,
+                tools.callApi(configNode.ipaddress, topic, creds,
                     function (data) {
                         node.send({ topic, payload: data, request: msg.payload });
                         node.status({ fill: "green", shape: "dot", text: "connected" });
