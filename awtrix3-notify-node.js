@@ -1,12 +1,14 @@
 module.exports = function (RED) {
     var tools = require('./tools');
+       var Mustache = require('mustache');
 
     function Awtrix3NotifyNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;
         node.on('input', async function (msg) {
             msg.payload = msg.payload || {};
-            const options = {...JSON.parse(config.options), ...msg.payload};
+            var output = Mustache.render(config.options, { msg: msg });
+            const options = {...JSON.parse(output), ...msg.payload};
             if (!config.text && !config.icon) {
                 msg.topic = "notify/dismiss";
                 msg.payload = null
