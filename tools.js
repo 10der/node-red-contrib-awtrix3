@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const sharp = require('sharp'); // For image processing (like Pillow/PIL)
 
 module.exports.getIcon = async function (url) {

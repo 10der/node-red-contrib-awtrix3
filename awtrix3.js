@@ -1,5 +1,3 @@
-// const fetch = require('node-fetch');
-
 module.exports = function (RED) {
     var tools = require('./tools');
 
