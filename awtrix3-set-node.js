@@ -4,11 +4,11 @@ module.exports = function (RED) {
         var node = this;
         node.on('input', function (msg) {
             const state = ["power", "sleep", "sound", "rtttl", "moodlight",
-                "indicator", "indicator1", "indicator2", "indicator3", "settings"];
-            msg.topic = config.command;
-            let command = config.command;
-            msg.payload = null;
+                "indicator", "indicator1", "indicator2", "indicator3", "settings", "switch"];
+            let command = config.command;            
             if (command != "msg.topic") {
+                msg.payload = null;
+                msg.topic = config.command;
                 switch (command) {
                     case "power":
                         msg.payload = { "power": config.power == "true" };
