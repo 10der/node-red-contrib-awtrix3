@@ -15,6 +15,7 @@ module.exports = function (RED) {
             };
             let payload = { ...app, ...options };
             if (payload.icon) {
+                payload.icon = payload.icon.toString();
                 if (payload.icon.startsWith('http')) {
                     const iconFile = await tools.getIcon(payload.icon);
                     payload.icon = iconFile;

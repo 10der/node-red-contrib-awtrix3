@@ -4,7 +4,8 @@ module.exports = function (RED) {
         var node = this;
         node.on('input', function (msg) {
             const state = ["power", "sleep", "sound", "rtttl", "moodlight",
-                "indicator", "indicator1", "indicator2", "indicator3", "settings", "switch"];
+                "indicator", "indicator1", "indicator2", "indicator3", "settings", 
+                "switch", "nextapp", "previousapp"];
             let command = config.command;            
             if (command != "msg.topic") {
                 msg.payload = null;

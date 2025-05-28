@@ -21,6 +21,7 @@ module.exports = function (RED) {
                 msg.topic = "notify";
                 let payload = { ...notification, ...options };
                 if (payload.icon) {
+                    payload.icon = payload.icon.toString();
                     if (payload.icon.startsWith('http')) {
                         const iconFile = await tools.getIcon(payload.icon);
                         payload.icon = iconFile;
