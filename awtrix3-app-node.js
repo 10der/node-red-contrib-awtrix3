@@ -34,10 +34,12 @@ module.exports = function (RED) {
                 node.status({});
             }, 5000);
 
+            msg.payload = payload;
             send(msg);
         });
 
         const send = function (msg) {
+            // node.warn(msg);
             tools.callApi(configNode.ipaddress, msg.topic, creds,
                 function (data) {
                     node.send({ topic: msg.topic, payload: data, request: msg.payload });
