@@ -81,7 +81,8 @@
             moodlight: { value: '{"brightness":170,"color":"#FF00FF"}' },
             indicator: { value: "1", validate: function (v) { return ((v === undefined) || (/^\d+$/).test(v)); } },
             indicator_color: { value: "#32a852", validate: function (v) { return ((v === undefined) || (/^\#([0-9a-f]{3}|[0-9a-f]{6})$/i).test(v)); } },
-            settings: { value: '{"TSPEED":500}' }
+            settings: { value: '{"TSPEED":500}' },
+            device: { type: "awtrix3-config", required: true },
         },
         inputs: 1,
         outputs: 1,
@@ -130,6 +131,11 @@
 </script>
 
 <script type="text/html" data-template-name="awtrix3-set">
+    <div class="form-row">
+        <label for="node-input-device"><i class="icon-tag"></i> AWTRIX3</label>
+        <input type="text" id="node-input-device" placeholder="placeholder="http://">
+    </div>
+
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">

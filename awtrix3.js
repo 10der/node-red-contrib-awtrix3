@@ -35,37 +35,27 @@ module.exports = function (RED) {
         init();
 
         node.on('input', function (msg) {
-            const state = ["stats", "settings", "effects", "transitions", "screen", "loop"];
-            const topic = msg.topic.toLowerCase();
-            if (!msg.payload && state.includes(topic)) {
-                tools.callApi(configNode.ipaddress, topic, creds,
-                    function (data) {
-                        node.send({ topic, payload: data, request: msg.payload });
-                        node.status({ fill: "green", shape: "dot", text: "connected" });
-                    },
-                    function (error) {
-                        node.error(error.message, { topic });
-                        node.status({ fill: "red", shape: "dot", text: "error" });
-                    });
-            } else {
-                tools.callApi(configNode.ipaddress, topic, creds,
-                    function (data) {
-                        node.send({ topic, payload: data, request: msg.payload });
-                        node.status({ fill: "green", shape: "dot", text: "connected" });
-                    },
-                    function (error) {
-                        node.error(error.message, { topic, payload: msg.payload });
-                        node.status({ fill: "red", shape: "dot", text: "error" });
-                    },
-                    msg.payload);
-            }
-        });
-    }
 
-    RED.nodes.registerType("awtrix3", Awtrix3Node, {
-        credentials: {
-            username: { type: "text" },
-            password: { type: "password" }
+            node.status({ fill: 'green', shape: 'dot', text: 'triggered...' });
+            setTimeout(() => {
+                node.status({});
+            }, 5000);
+
+            send(msg);
+        });
+
+        const send = function (msg) {
+            tools.callApi(configNode.ipaddress, msg.topic, creds,
+                function (data) {
+                    node.send({ topic: msg.topic, payload: data, request: msg.payload });
+                    node.status({ fill: "green", shape: "dot", text: "ok" });
+                },
+                function (error) {
+                    node.error(error.message, { topic: msg.topic, payload: msg.payload });
+                    node.status({ fill: "red", shape: "dot", text: "error" });
+                },
+                msg.payload);
         }
-    });
+    }
+    RED.nodes.registerType("awtrix3", Awtrix3Node);
 }

@@ -7,6 +7,7 @@
             icon: { value: "" },
             text: { value: "" },
             options: { value: "{}" },
+            device: { type: "awtrix3-config", required: true },
         },
         inputs: 1,
         outputs: 1,
@@ -24,6 +25,11 @@
 </script>
 
 <script type="text/html" data-template-name="awtrix3-notify">
+    <div class="form-row">
+        <label for="node-input-device"><i class="icon-tag"></i> AWTRIX3</label>
+        <input type="text" id="node-input-device" placeholder="placeholder="http://">
+    </div>
+
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">

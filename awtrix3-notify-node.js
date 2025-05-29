@@ -1,14 +1,21 @@
 module.exports = function (RED) {
     var tools = require('./tools');
-       var Mustache = require('mustache');
+    var Mustache = require('mustache');
 
     function Awtrix3NotifyNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;
+        const configNode = RED.nodes.getNode(config.device);
+        if (!configNode) {
+            node.error("No config node found");
+            return;
+        }
+        const creds = configNode.credentials;
+
         node.on('input', async function (msg) {
             msg.payload = msg.payload || {};
             var output = Mustache.render(config.options, { msg: msg });
-            const options = {...JSON.parse(output), ...msg.payload};
+            const options = { ...JSON.parse(output), ...msg.payload };
             if (!config.text && !config.icon) {
                 msg.topic = "notify/dismiss";
                 msg.payload = null
@@ -17,7 +24,7 @@ module.exports = function (RED) {
                 let notification = {
                     text: config.text,
                     icon: config.icon,
-                };                
+                };
                 msg.topic = "notify";
                 let payload = { ...notification, ...options };
                 if (payload.icon) {
@@ -29,8 +36,27 @@ module.exports = function (RED) {
                 }
                 msg.payload = payload;
             }
-            node.send(msg);
+
+            node.status({ fill: 'green', shape: 'dot', text: 'triggered...' });
+            setTimeout(() => {
+                node.status({});
+            }, 5000);
+
+            send(msg);
         });
+
+        const send = function (msg) {
+            tools.callApi(configNode.ipaddress, msg.topic, creds,
+                function (data) {
+                    node.send({ topic: msg.topic, payload: data, request: msg.payload });
+                    node.status({ fill: "green", shape: "dot", text: "ok" });
+                },
+                function (error) {
+                    node.error(error.message, { topic: msg.topic, payload: msg.payload });
+                    node.status({ fill: "red", shape: "dot", text: "error" });
+                },
+                msg.payload);
+        }
     }
     RED.nodes.registerType("awtrix3-notify", Awtrix3NotifyNode);
 }
