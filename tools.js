@@ -12,9 +12,18 @@ function Awtrix3Device(host, creds) {
     this.init();
 }
 
-Awtrix3Device.prototype.init = function () {
-    this.initialize = false
-    this.callApi('stats', null);
+Awtrix3Device.prototype.init = async function () {
+    const ipaddress = this.host;
+    const url = `http://${ipaddress}/api/stats`;
+    try {
+        const response = await fetch(url, { timeout: 10000 });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        this.emit("ready");
+    } catch (error) {
+        this.emit("error", error, "stats", null, null);
+    }
 }
 
 Awtrix3Device.prototype.callApi = function (endpoint, payload) {
@@ -45,14 +54,7 @@ Awtrix3Device.prototype.callApi = function (endpoint, payload) {
             throw new Error(`Http error: ${response ? response.status : 'Network error'}`);
         })
         .then((data) => {
-            if (!this.initialize) {
-                this.emit("ready");
-                this.initialize = true;
-                return true;
-            }
-            this.initialize = true;
             this.emit("payload", endpoint, payload, data);
-
         })
         .catch((error) => {
             this.emit("error", error, endpoint, payload, null);
