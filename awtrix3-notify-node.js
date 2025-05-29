@@ -1,5 +1,6 @@
+var Awtrix3Device = require('./tools');
+
 module.exports = function (RED) {
-    var tools = require('./tools');
     var Mustache = require('mustache');
 
     function Awtrix3NotifyNode(config) {
@@ -11,6 +12,23 @@ module.exports = function (RED) {
             return;
         }
         const creds = configNode.credentials;
+
+        node.status({fill:"yellow", shape:"ring", text:"Loading..."});
+        this.device = new Awtrix3Device(configNode.ipaddress, creds);
+        this.device.on('ready', function() {
+            node.status({ fill: "green", shape: "dot", text: "ready" });
+            setTimeout(() => {
+                node.status({});
+            }, 5000);
+        });
+        this.device.on('error', function(error, topic, request, response) {
+            node.status({ fill: "red", shape: "ring", text: "error" });
+            node.error(error.message, { topic: topic, payload: response, request: request });
+        });
+        this.device.on('payload', function(topic, request, response) {
+            node.send({ topic: topic, payload: response, request: request });
+            node.status({ fill: "green", shape: "dot", text: "ok" });
+        });    
 
         node.on('input', async function (msg) {
             msg.payload = msg.payload || {};
@@ -30,7 +48,7 @@ module.exports = function (RED) {
                 if (payload.icon) {
                     payload.icon = payload.icon.toString();
                     if (payload.icon.startsWith('http')) {
-                        const iconFile = await tools.getIcon(payload.icon);
+                        const iconFile = await this.device.getIcon(payload.icon);
                         payload.icon = iconFile;
                     }
                 }
@@ -42,21 +60,8 @@ module.exports = function (RED) {
                 node.status({});
             }, 5000);
 
-            send(msg);
+            this.device.callApi(msg.topic, msg.payload);
         });
-
-        const send = function (msg) {
-            tools.callApi(configNode.ipaddress, msg.topic, creds,
-                function (data) {
-                    node.send({ topic: msg.topic, payload: data, request: msg.payload });
-                    node.status({ fill: "green", shape: "dot", text: "ok" });
-                },
-                function (error) {
-                    node.error(error.message, { topic: msg.topic, payload: msg.payload });
-                    node.status({ fill: "red", shape: "dot", text: "error" });
-                },
-                msg.payload);
-        }
     }
     RED.nodes.registerType("awtrix3-notify", Awtrix3NotifyNode);
 }
